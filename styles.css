@@ -1,0 +1,483 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f1f3f6;
+}
+
+.app {
+  max-width: 500px;
+  margin: auto;
+  padding: 15px;
+}
+
+header { text-align: center; }
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+input, textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  transition: all 0.2s ease;
+}
+
+/* Efecto al enfocar inputs */
+input:focus, textarea:focus {
+  border-color: #27ae60;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(39,174,96,0.1);
+}
+
+#envioCalculado {
+  background: #eafaf1;
+  font-weight: bold;
+}
+
+/* ========== BOTÓN PRINCIPAL ========== */
+button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: #27ae60;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Efecto hover para computadora */
+button:hover {
+  background: #219a52;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39,174,96,0.3);
+}
+
+/* Efecto active (cuando se presiona - para celular y computadora) */
+button:active {
+  transform: translateY(0px);
+  background: #1e8449;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Botón deshabilitado */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ========== SUBIDA DE FOTOS (NUEVA VERSIÓN) ========== */
+.file-upload {
+  margin: 15px 0;
+}
+
+.file-label-button {
+  display: inline-block;
+  width: 100%;
+  background: #27ae60;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-align: center;
+  border: none;
+}
+
+/* Efecto hover para computadora */
+.file-label-button:hover {
+  background: #219a52;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39,174,96,0.3);
+}
+
+/* Efecto active (cuando se presiona) */
+.file-label-button:active {
+  transform: translateY(0px);
+  background: #1e8449;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.file-info {
+  margin-top: 10px;
+  font-size: 14px;
+  word-break: break-word;
+  border-radius: 8px;
+  background: #f8f9fa;
+  padding: 8px;
+}
+
+.file-hint {
+  display: block;
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 5px;
+  text-align: center;
+}
+
+/* Ocultar el input file original */
+#fotos {
+  display: none;
+}
+
+/* ========== BOTÓN WHATSAPP FLOTANTE (ORIGINAL) ========== */
+.wpp-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25D366;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+  text-decoration: none;
+  font-size: 24px;
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+/* Efecto hover para computadora */
+.wpp-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(37,211,102,0.4);
+}
+
+/* Efecto active (cuando se presiona) */
+.wpp-btn:active {
+  transform: scale(0.95);
+}
+
+/* ========== INPUTS CON EFECTOS TÁCTILES ========== */
+input, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Efecto al tocar en móvil */
+input:active, textarea:active {
+  background-color: #f8f9fa;
+  transform: scale(0.99);
+}
+
+/* ========== MENSAJE ========== */
+#mensaje {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+/* ========== SECCIÓN DE INFORMACIÓN ========== */
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.info-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.info-header {
+    background: linear-gradient(135deg, #27ae60, #219a52);
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+}
+
+.info-header i {
+    font-size: 18px;
+}
+
+.info-header h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.info-content {
+    padding: 15px;
+}
+
+.info-content ul {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.info-content ul li {
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #555;
+}
+
+.info-content ul li i {
+    color: #27ae60;
+    font-size: 14px;
+    min-width: 20px;
+    margin-top: 2px;
+}
+
+.info-content ul li strong {
+    color: #333;
+}
+
+/* Pasos */
+.paso {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.paso:hover {
+    background: #e8f5e9;
+    transform: translateX(5px);
+}
+
+.paso-numero {
+    width: 28px;
+    height: 28px;
+    background: #27ae60;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.paso-texto {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.4;
+}
+
+/* Título del formulario */
+.form-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #27ae60;
+    font-weight: bold;
+    font-size: 17px;
+    color: #27ae60;
+}
+
+.form-title i {
+    font-size: 18px;
+}
+
+/* Botón de submit mejorado */
+.submit-btn {
+    background: linear-gradient(135deg, #27ae60, #219a52);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.submit-btn i {
+    font-size: 16px;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, #219a52, #1e8449);
+}
+
+/* Botones de WhatsApp duales */
+.whatsapp-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.wpp-btn-dual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    width: auto;
+    min-width: 110px;
+}
+
+.wpp-btn-dual i {
+    font-size: 16px;
+}
+
+.wpp-btn-dual.cotizar {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+}
+
+.wpp-btn-dual.ayuda {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.wpp-btn-dual:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+.wpp-btn-dual:active {
+    transform: translateY(0);
+}
+
+/* ========== RESPONSIVE PARA MÓVIL ========== */
+@media (max-width: 600px) {
+  .app {
+    padding: 10px;
+  }
+  
+  .card {
+    padding: 15px;
+  }
+  
+  button {
+    padding: 12px;
+    font-size: 15px;
+  }
+  
+  .file-label-button {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .file-info {
+    font-size: 12px;
+    padding: 6px;
+  }
+  
+  .file-hint {
+    font-size: 10px;
+  }
+  
+  /* Responsive para la nueva sección */
+  .info-header h3 {
+    font-size: 13px;
+  }
+  
+  .info-header i {
+    font-size: 16px;
+  }
+  
+  .info-content ul li {
+    font-size: 11px;
+  }
+  
+  .paso-texto {
+    font-size: 11px;
+  }
+  
+  .paso-numero {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  
+  .form-title {
+    font-size: 15px;
+  }
+  
+  .form-title i {
+    font-size: 16px;
+  }
+  
+  .whatsapp-buttons {
+    bottom: 15px;
+    right: 15px;
+    gap: 8px;
+  }
+  
+  .wpp-btn-dual {
+    padding: 8px 12px;
+    font-size: 11px;
+    min-width: 85px;
+  }
+  
+  .wpp-btn-dual i {
+    font-size: 12px;
+  }
+  
+  /* Mantener el botón original para compatibilidad */
+  .wpp-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
+/* Animación de entrada */
+.info-card {
+    animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Mandaditos Calvillo</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="app">
+
+  <header>
+    <h1>🛵 Mandaditos Calvillo</h1>
+    <p>Envíos rápidos y seguros</p>
+  </header>
+
+  <!-- SECCIÓN DE AVISOS Y PASOS -->
+  <div class="info-section">
+    <div class="info-card avisos">
+      <div class="info-header">
+        <i class="fas fa-info-circle"></i>
+        <h3>📢 Avisos importantes</h3>
+      </div>
+      <div class="info-content">
+        <ul>
+          <li><i class="fas fa-weight-hanging"></i> <strong>El costo de envío es aproximado</strong> - Puede variar según dimensiones, peso y cantidad del artículo.</li>
+          <li><i class="fas fa-clock"></i> <strong>Horario extendido</strong> - Servicio disponible en horario extendido (puede aumentar la tarifa).</li>
+          <li><i class="fas fa-calendar-alt"></i> <strong>Días festivos</strong> - Los envíos en días festivos pueden tener costo adicional.</li>
+          <li><i class="fas fa-cloud-rain"></i> <strong>Clima desfavorable</strong> - En condiciones climáticas adversas, los tiempos de entrega pueden variar y el costo de envio puede aumentar.</li>
+          <li><i class="fas fa-phone-alt"></i> <strong>Confirmación vía WhatsApp</strong> - Una vez recibido tu pedido, te contactaremos para confirmar el costo final y detalles.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-card pasos">
+      <div class="info-header">
+        <i class="fas fa-list-ol"></i>
+        <h3>📋 ¿Cómo funciona?</h3>
+      </div>
+      <div class="info-content">
+        <div class="paso">
+          <span class="paso-numero">1</span>
+          <span class="paso-texto">Completa todos los datos del formulario</span>
+        </div>
+        <div class="paso">
+          <span class="paso-numero">2</span>
+          <span class="paso-texto">Sube fotos del artículo</span>
+        </div>
+        <div class="paso">
+          <span class="paso-numero">3</span>
+          <span class="paso-texto">Presiona "Solicitar ahora, te redirigirá a nuestro chat de whatsapp con los datos precargados de tu envio "</span>
+        </div>
+        <div class="paso">
+          <span class="paso-numero">4</span>
+          <span class="paso-texto">Te confirmaremos vía WhatsApp el costo de tu pedido</span>
+        </div>
+        <div class="paso">
+          <span class="paso-numero">5</span>
+          <span class="paso-texto">Un repartidor recogerá y entregará tu paquete</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form id="pedidoForm" class="card">
+
+    <div class="form-title">
+      <i class="fas fa-pen-alt"></i>
+      <span>Solicita tu envío</span>
+    </div>
+
+    <input type="text" id="recoleccion" placeholder="📍 Dirección de recolección" required>
+    <input type="text" id="entrega" placeholder="📍 Dirección de entrega" required>
+
+    <input type="text" id="remitente" placeholder="👤 Quién envía" required>
+    <input type="tel" id="telRemitente" placeholder="📞 Teléfono quien envía" required>
+
+    <input type="text" id="destinatario" placeholder="👤 Quién recibe" required>
+    <input type="tel" id="telDestinatario" placeholder="📞 Teléfono quien recibe" required>
+
+    <textarea id="descripcion" placeholder="📦 ¿Qué se envía? (dimensiones, peso aproximado, etc.)" required></textarea>
+
+    <input type="number" id="pago" placeholder="💰 ¿Cuánto se paga por el producto?" required>
+
+    <input type="text" id="envioCalculado" placeholder="🚚 Costo de envío automático" readonly>
+
+    <!-- SECCIÓN DE FOTOS -->
+    <div class="file-upload">
+      <label for="fotos" class="file-label-button">
+        <i class="fas fa-camera"></i> Subir fotos
+      </label>
+      <input type="file" id="fotos" name="fotos" multiple accept="image/*" style="display: none;">
+      <div id="fotos-info" class="file-info"></div>
+      <small class="file-hint">📸 Puedes seleccionar varias fotos (máx. 5MB cada una)</small>
+    </div>
+
+    <button type="submit" class="submit-btn">
+      <i class="fas fa-paper-plane"></i> Solicitar ahora
+    </button>
+
+  </form>
+
+  <p id="mensaje"></p>
+
+</div>
+
+<!-- BOTÓN WHATSAPP CON DOS OPCIONES -->
+<div class="whatsapp-buttons">
+  <a href="https://wa.me/5213114445566?text=Hola%2C%20quiero%20solicitar%20una%20cotizaci%C3%B3n%20especial%20para%20un%20env%C3%ADo" class="wpp-btn cotizar" target="_blank">
+    <i class="fas fa-calculator"></i>
+    <span>Cotizar</span>
+  </a>
+  <a href="https://wa.me/5213114445566?text=Hola%2C%20necesito%20ayuda%20con%20un%20env%C3%ADo" class="wpp-btn ayuda" target="_blank">
+    <i class="fas fa-headset"></i>
+    <span>Ayuda</span>
+  </a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

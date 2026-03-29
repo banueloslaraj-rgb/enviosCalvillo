@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Admin</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f1f3f6;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+.card {
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  width:300px;
+}
+input,button {
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  border-radius:10px;
+}
+button {
+  background:#27ae60;
+  color:white;
+  border:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>🔐 Administrador</h2>
+
+<input id="email" placeholder="Correo">
+<input id="password" type="password" placeholder="Contraseña">
+
+<button onclick="login()">Ingresar</button>
+
+<p id="msg"></p>
+</div>
+
+<script>
+function login(){
+  if(email.value==="envioscalvillo@gmail.com" && password.value==="calvillo123"){
+    localStorage.setItem("admin","true");
+    window.location="admin.html";
+  }else{
+    msg.innerText="Datos incorrectos";
+  }
+}
+</script>
+
+</body>
+</html>
