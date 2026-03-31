@@ -9,6 +9,70 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// ========== FUNCIONES PARA FORMATEAR FECHA EN HORA DE MÉXICO ==========
+
+// Función para formatear fecha en hora de México (COMPLETA)
+function formatearFechaMexico(fechaISO) {
+    if (!fechaISO) return "Sin fecha";
+    
+    try {
+        let fechaStr = fechaISO;
+        if (!fechaStr.includes('Z') && !fechaStr.includes('+')) {
+            fechaStr = fechaStr + 'Z';
+        }
+        
+        const fecha = new Date(fechaStr);
+        
+        if (isNaN(fecha.getTime())) {
+            console.error("Fecha inválida:", fechaISO);
+            return "Fecha inválida";
+        }
+        
+        return fecha.toLocaleString('es-MX', {
+            timeZone: 'America/Mexico_City',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        });
+    } catch (error) {
+        console.error("Error al formatear fecha:", error);
+        return "Error de formato";
+    }
+}
+
+// Función para formatear fecha corta (para tarjetas)
+function formatearFechaCorta(fechaISO) {
+    if (!fechaISO) return "Sin fecha";
+    
+    try {
+        let fechaStr = fechaISO;
+        if (!fechaStr.includes('Z') && !fechaStr.includes('+')) {
+            fechaStr = fechaStr + 'Z';
+        }
+        
+        const fecha = new Date(fechaStr);
+        
+        if (isNaN(fecha.getTime())) {
+            return "Fecha inválida";
+        }
+        
+        return fecha.toLocaleString('es-MX', {
+            timeZone: 'America/Mexico_City',
+            day: '2-digit',
+            month: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    } catch (error) {
+        console.error("Error:", error);
+        return "Error";
+    }
+}
+
 // Variables
 let filtroEstado = null;
 let intervaloActualizacion = null;
@@ -79,7 +143,7 @@ function mostrarNotificacion(mensaje, tipo = "info") {
     setTimeout(() => notif.remove(), 2000);
 }
 
-// 🔄 ACTUALIZAR ESTADO DE PEDIDO + WHATSAPP (MULTIDISPOSITIVO)
+// 🔄 ACTUALIZAR ESTADO DE PEDIDO + WHATSAPP
 async function actualizarEstadoPedido(id) {
     const selectElement = document.getElementById(`estado-${id}`);
     if (!selectElement) {
@@ -100,7 +164,6 @@ async function actualizarEstadoPedido(id) {
     }
     
     try {
-        // 🔍 Obtener datos del pedido
         const { data: pedido, error: errorFetch } = await supabaseClient
             .from("pedidos")
             .select("*")
@@ -109,7 +172,6 @@ async function actualizarEstadoPedido(id) {
         
         if (errorFetch) throw errorFetch;
 
-        // 📝 Actualizar estado
         const { error } = await supabaseClient
             .from("pedidos")
             .update({ estado: nuevoEstado })
@@ -119,7 +181,6 @@ async function actualizarEstadoPedido(id) {
         
         mostrarNotificacion("✅ Estado actualizado correctamente", "info");
 
-        // 📲 MENSAJES SEGÚN ESTADO
         let telefono = null;
         let mensaje = "";
 
@@ -138,15 +199,14 @@ async function actualizarEstadoPedido(id) {
             mensaje = `✅ *Pedido entregado*\n\nHola ${pedido.remitente}, tu pedido ya fue entregado correctamente.\n\n📦 ${pedido.descripcion}`;
         }
 
-        // 🚀 WHATSAPP UNIVERSAL
         if (telefono && mensaje) {
             const whatsappUrl = `https://api.whatsapp.com/send?phone=52${telefono}&text=${encodeURIComponent(mensaje)}`;
 
             setTimeout(() => {
                 if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                    window.location.href = whatsappUrl; // 📱 celular
+                    window.location.href = whatsappUrl;
                 } else {
-                    window.open(whatsappUrl, "_blank"); // 💻 computadora
+                    window.open(whatsappUrl, "_blank");
                 }
             }, 800);
         }
@@ -166,12 +226,11 @@ async function actualizarEstadoPedido(id) {
     }
 }
 
-// Filtrar por estado al hacer clic en las estadísticas
+// Filtrar por estado
 function filtrarPorEstado(estado) {
     filtroEstado = estado;
     cargarPedidos();
     
-    // Scroll suave y resaltar la sección
     setTimeout(() => {
         const seccion = document.querySelector(`.seccion-${estado}`);
         if (seccion) {
@@ -207,21 +266,7 @@ function toggleEntregados() {
 
 // Renderizar card de pedido
 function renderizarCardPedido(p) {
-    let fechaFormateada = "Sin fecha";
-    if (p.fecha) {
-        try {
-            const fechaObj = new Date(p.fecha);
-            if (!isNaN(fechaObj.getTime())) {
-                fechaFormateada = fechaObj.toLocaleString('es-MX', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-            }
-        } catch (e) {}
-    }
+    const fechaFormateada = formatearFechaCorta(p.fecha);
     
     let imagenesHtml = '';
     if (p.fotos && Array.isArray(p.fotos) && p.fotos.length > 0) {
@@ -239,7 +284,7 @@ function renderizarCardPedido(p) {
         <div class="card ${getEstadoClass(p.estado)}">
             <div class="pedido-id">
                 🆔 Pedido #${p.id.substring(0, 8)}...
-                <span class="pedido-fecha">📅 ${fechaFormateada}</span>
+                <span class="pedido-fecha" title="${formatearFechaMexico(p.fecha)}">📅 ${fechaFormateada}</span>
             </div>
             
             <p><strong>📍 Recolección:</strong> ${escapeHtml(p.recoleccion) || "No especificado"}</p>
@@ -299,17 +344,14 @@ async function cargarPedidos() {
             return;
         }
         
-        // Separar por estados
         const pendientes = data.filter(p => p.estado === "pendiente");
         const asignados = data.filter(p => p.estado === "asignado");
         const enCamino = data.filter(p => p.estado === "en camino");
         const entregados = data.filter(p => p.estado === "entregado");
         
-        // Verificar nuevos pedidos pendientes
         if (pendientes.length > ultimaCantidadPendientes) {
             const nuevos = pendientes.length - ultimaCantidadPendientes;
             mostrarNotificacion(`🔔 ${nuevos} nuevo(s) pedido(s) pendiente(s)`, "info");
-            // Reproducir sonido opcional
             try {
                 const audio = new Audio("https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3");
                 audio.volume = 0.2;
@@ -318,14 +360,12 @@ async function cargarPedidos() {
         }
         ultimaCantidadPendientes = pendientes.length;
         
-        // Actualizar estadísticas en las tarjetas originales
         const statCards = document.querySelectorAll('.stat-card');
         if (statCards.length >= 1) {
             const pedidosStat = statCards[0].querySelector('.stat-number');
             if (pedidosStat) pedidosStat.textContent = data.length;
         }
         
-        // Stats con filtros clickeables
         const statsHtml = `
             <div class="stats-filtros">
                 <div class="stat-filtro pendiente-filtro" onclick="filtrarPorEstado('pendiente')">
@@ -347,7 +387,6 @@ async function cargarPedidos() {
             </div>
         `;
         
-        // Barra de filtro activo
         let filtroHtml = '';
         if (filtroEstado) {
             filtroHtml = `
@@ -358,7 +397,6 @@ async function cargarPedidos() {
             `;
         }
         
-        // Determinar qué pedidos mostrar según filtro
         let pedidosAMostrar = {};
         if (filtroEstado === 'pendiente') {
             pedidosAMostrar = { pendientes };
@@ -374,7 +412,6 @@ async function cargarPedidos() {
         
         let html = statsHtml + filtroHtml;
         
-        // Sección Pendientes
         if (pedidosAMostrar.pendientes && pedidosAMostrar.pendientes.length > 0) {
             html += `
                 <div class="seccion-pedidos seccion-pendiente">
@@ -386,7 +423,6 @@ async function cargarPedidos() {
             `;
         }
         
-        // Sección Asignados
         if (pedidosAMostrar.asignados && pedidosAMostrar.asignados.length > 0) {
             html += `
                 <div class="seccion-pedidos seccion-asignado">
@@ -398,7 +434,6 @@ async function cargarPedidos() {
             `;
         }
         
-        // Sección En camino
         if (pedidosAMostrar.enCamino && pedidosAMostrar.enCamino.length > 0) {
             html += `
                 <div class="seccion-pedidos seccion-encamino">
@@ -410,7 +445,6 @@ async function cargarPedidos() {
             `;
         }
         
-        // Sección Entregados
         if (pedidosAMostrar.entregados && pedidosAMostrar.entregados.length > 0) {
             html += `
                 <div class="seccion-pedidos seccion-entregado">
@@ -471,21 +505,7 @@ async function cargarRepartidores() {
             const card = document.createElement("div");
             card.className = "card repartidor-card";
             
-            let fechaFormateada = "Sin fecha";
-            if (r.fecha_registro) {
-                try {
-                    const fechaObj = new Date(r.fecha_registro);
-                    if (!isNaN(fechaObj.getTime())) {
-                        fechaFormateada = fechaObj.toLocaleString('es-MX', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        });
-                    }
-                } catch (e) {}
-            }
+            let fechaFormateada = formatearFechaCorta(r.fecha_registro);
             
             let estadoColor = "";
             let estadoTexto = "";
@@ -510,7 +530,7 @@ async function cargarRepartidores() {
             card.innerHTML = `
                 <div class="repartidor-header">
                     <strong>🛵 ${escapeHtml(r.nombre_completo)}</strong>
-                    <span class="repartidor-fecha">📅 ${fechaFormateada}</span>
+                    <span class="repartidor-fecha" title="${formatearFechaMexico(r.fecha_registro)}">📅 ${fechaFormateada}</span>
                 </div>
                 
                 <p><strong>📞 Teléfono:</strong> ${escapeHtml(r.telefono)}</p>
@@ -570,10 +590,10 @@ async function actualizarEstadoRepartidor(id) {
         
         btn.innerText = "✅ Actualizado";
         
-        const loginUrl = "https://banueloslaraj-rgb.github.io/enviosjl/login-repartidor.html";
+        const loginUrl = "https://mandaditos-calvillo.netlify.app/login-repartidor.html";
         
         if (estado === "activo" && repartidor && repartidor.telefono) {
-            const mensaje = `🎉 *¡FELICIDADES!* 🎉\n\nHola ${repartidor.nombre_completo}, tu registro como repartidor de Mandaditos Express ha sido *APROBADO* ✅\n\n🔑 Tu código de acceso es: *${repartidor.codigo}*\n\nIngresa a: ${loginUrl}\n\n¡Bienvenido al equipo! 🛵`;
+            const mensaje = `🎉 *¡FELICIDADES!* 🎉\n\nHola ${repartidor.nombre_completo}, tu registro como repartidor de Mandaditos Calvillo ha sido *APROBADO* ✅\n\n🔑 Tu código de acceso es: *${repartidor.codigo}*\n\nIngresa a: ${loginUrl}\n\n¡Bienvenido al equipo! 🛵`;
             const whatsappUrl = `https://wa.me/52${repartidor.telefono}?text=${encodeURIComponent(mensaje)}`;
             
             setTimeout(() => {
@@ -680,7 +700,7 @@ function cambiarPestaña(pestaña) {
     }
 }
 
-// 📊 Estadísticas rápidas (original)
+// 📊 Estadísticas rápidas
 async function cargarEstadisticas() {
     const { count: pedidosCount } = await supabaseClient
         .from("pedidos")
@@ -723,7 +743,6 @@ async function cargarEstadisticas() {
 
 // 🚀 Iniciar actualización automática
 function iniciarActualizacionAutomatica() {
-    // Actualizar cada 10 segundos
     intervaloActualizacion = setInterval(() => {
         if (pestañaActiva === "pedidos") {
             cargarPedidos();
@@ -732,7 +751,6 @@ function iniciarActualizacionAutomatica() {
         }
     }, 10000);
     
-    // Actualizar al volver a la pestaña
     document.addEventListener("visibilitychange", () => {
         if (!document.hidden) {
             if (pestañaActiva === "pedidos") {
@@ -744,7 +762,7 @@ function iniciarActualizacionAutomatica() {
     });
 }
 
-// Escuchar cambios en tiempo real con Supabase
+// Escuchar cambios en tiempo real
 function suscribirCambios() {
     supabaseClient
         .channel("admin-pedidos")
@@ -770,6 +788,7 @@ function suscribirCambios() {
 // 🚀 Inicializar
 document.addEventListener("DOMContentLoaded", () => {
     console.log("🚀 Panel admin iniciado con actualización automática");
+    console.log("🕐 Zona horaria configurada: America/Mexico_City");
     cargarEstadisticas();
     cargarPedidos();
     iniciarActualizacionAutomatica();
